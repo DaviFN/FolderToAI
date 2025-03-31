@@ -42,7 +42,6 @@ cargo run --release
 - The application will scan the folder and provide you messages.
 - You can then paste these messages into your AI chat system of choice to let it know about the folder's contents.
 
-**Demonstration Video**:
 [![FolderToAI Demo](https://img.youtube.com/vi/msDBWLUTHlU/0.jpg)](https://www.youtube.com/watch?v=msDBWLUTHlU)
 
 2. **Manual Invocation**:
