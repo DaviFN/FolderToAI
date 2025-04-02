@@ -1,4 +1,5 @@
 use serde::{Serialize, Deserialize};
+use size::Size;
 use std::collections::BTreeSet;
 use std::io::Write;
 
@@ -11,28 +12,23 @@ struct Vec2Serializable {
 #[derive(Serialize, Deserialize)]
 pub struct Settings {
     window_size: Vec2Serializable,
+    pub file_size_limit: usize,
     #[serde(skip)]
     ignored_subfolders_input: String,
-    pub ignored_subfolders: BTreeSet<String>,
+    pub ignored_subfolders: BTreeSet<String>
 }
 
 impl Settings {
     pub fn new() -> Self {
-        let mut settings = Settings{window_size: Vec2Serializable{x: Self::default_window_width(), y: Self::default_window_height()}, ignored_subfolders_input: String::from(""), ignored_subfolders: BTreeSet::new()};
+        const DEFAULT_WINDOW_WIDTH: f32 = 510.0;
+        const DEFAULT_WINDOW_HEIGHT: f32 = 400.0;
+        const DEFAULT_FILE_SIZE_LIMIT: usize = 100 * 1024; // 100 KiB
+
+        let mut settings = Settings{window_size: Vec2Serializable{x: DEFAULT_WINDOW_WIDTH, y: DEFAULT_WINDOW_HEIGHT}, ignored_subfolders_input: String::from(""), ignored_subfolders: BTreeSet::new(), file_size_limit: DEFAULT_FILE_SIZE_LIMIT};
 
         settings.initialize_default_ignored_subfolders();
 
         settings
-    }
-
-    fn default_window_width() -> f32
-    {
-        510.0
-    }
-
-    fn default_window_height() -> f32
-    {
-        400.0
     }
 
     pub fn window_size(&self) -> egui::Vec2
@@ -99,7 +95,15 @@ impl Settings {
         false
     }
 
-    pub fn show_gui(&mut self, ui: &mut egui::Ui) {
+    fn show_file_size_limit_settings_gui(&mut self, ui: &mut egui::Ui) {
+        ui.label(format!("Current file size limit: {}", Size::from_bytes(self.file_size_limit)));
+
+        const RANGE_MIN: usize = 100; // 100 bytes
+        const RANGE_MAX: usize = 1024 * 1024 * 1024; // 1 GiB
+        ui.add(egui::Slider::new(&mut self.file_size_limit, RANGE_MIN..=RANGE_MAX).text("File size limit (bytes)"));
+    }
+
+    fn show_folder_ignoring_settings_gui(&mut self, ui: &mut egui::Ui) {
         ui.horizontal(|ui| {
             ui.label("Add subfolder to ignore:");
             let text_edit_response = ui.add(egui::TextEdit::singleline(&mut self.ignored_subfolders_input));
@@ -142,6 +146,14 @@ impl Settings {
         for subfolder in subfolders_to_remove {
             self.remove_subfolder_to_ignore(&subfolder);
         }
+    }
+
+
+
+    pub fn show_gui(&mut self, ui: &mut egui::Ui) {
+        self.show_file_size_limit_settings_gui(ui);
+        ui.separator();
+        self.show_folder_ignoring_settings_gui(ui);
     }
 
     fn add_subfolder_to_ignore(&mut self) {

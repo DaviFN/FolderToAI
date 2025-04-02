@@ -10,7 +10,7 @@ This project simplifies user interaction with AI chat systems by partially autom
 
 - **Windows Explorer Context Menu Integration**: FolderToAI is designed to be launched directly from Windows Explorer by right-clicking inside a folder and selecting "FolderToAI", providing a seamless and convenient way to scan and generate messages for the folder's contents.
 - **Content Generation**: Creates a series of messages that describe the folder's contents, including file names, sizes, and types, along with their hierarchical structure and location within the folder. This ensures that AI systems receive detailed information about the files' contents and how they are organized.
-- **Binary File Detection and Size Filtering**: Identifies binary files and ensures that only text files are processed, excluding all binary files from being loaded. Additionally, it limits the loading of text files to those under 100 KiB, preventing the generation of an excessive number of messages that might be cumbersome to send.
+- **Binary File Detection and Size Filtering**: Identifies binary files and ensures that only text files are processed, excluding all binary files from being loaded. Additionally, it limits the loading of text files based on size, with a default limit of 100 KiB that can be configured, preventing the generation of an excessive number of messages that might be cumbersome to send.
 - **Ignoring Unwanted Subfolders**: FolderToAI allows users to ignore specific subfolders by name, providing flexibility in what is scanned. By default, it automatically ignores common folders that are often irrelevant or inconvenient, such as `.git`, `.svn`, `node_modules`, `.venv`, and others. This ensures that version control metadata and other unnecessary files are ignored from the generated messages, making the output more relevant and useful.
 - **Clipboard Integration**: The application automatically places the generated messages, which describe the folder's content, into the clipboard, allowing users to paste them into AI chats. While navigation is available via the left and right arrow keys, pasting a message using the `CTRL + V` hotkey automatically advances to the next one, often making manual navigation unnecessary and streamlining the interaction process.
 - **GUI Interface**: Provides a user-friendly graphical interface for monitoring the scanning, message generation, and message selection process.
@@ -42,6 +42,8 @@ cargo run --release
 - The application will scan the folder and provide you messages.
 - You can then paste these messages into your AI chat system of choice to let it know about the folder's contents.
 
+**Demo Video:**
+
 [![FolderToAI Demo](https://img.youtube.com/vi/msDBWLUTHlU/0.jpg)](https://www.youtube.com/watch?v=msDBWLUTHlU)
 
 2. **Manual Invocation**:
@@ -56,8 +58,6 @@ cargo run --release
 **Lack of Text Extraction from Document Formats**: FolderToAI currently does not extract text from document formats like PDFs, spreadsheets (e.g., .xlsx), and word processing files (e.g., .docx). These files are treated as binary and their contents are not included in the generated messages. Future enhancements could include integrating text extraction capabilities to improve the application's utility for users working with a variety of document types.
 
 **Binary File Detection**: While many common binary and text formats are covered, some less common types might not be correctly identified, and the heuristic used to determine whether the content is binary or not may fail.
-
-**File Size Limitation**: The application currently considers files larger than 100 KiB as too large to load. This might be a limitation if you need to handle larger files.
 
 **Message Size Limitation**: The generated messages are limited to approximately 4096 characters, without the possibility of configuration. If a folder contains many files or large file contents, this might result in a large number of messages, which could be reduced if the system accepts more characters.
 

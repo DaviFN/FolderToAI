@@ -362,10 +362,7 @@ impl FolderToAiApp {
                 }
     
                 if self.total_n_files == self.n_files_already_determined_whether_binary_or_not {
-                    // files larger than 100 KiB are considered too large
-                    // obs: this happens so fast that progress doesn't need to be shown
-                    const MAX_FILE_SIZE_IN_BYTES: usize = 100 * 1024;
-                    self.folder_info.as_mut().unwrap().determine_files_too_large(MAX_FILE_SIZE_IN_BYTES);
+                    self.folder_info.as_mut().unwrap().determine_files_too_large(self.settings.file_size_limit);
     
                     self.total_n_files_to_load = self.folder_info.as_mut().unwrap().get_number_of_files_whose_contents_should_be_loaded();
     
