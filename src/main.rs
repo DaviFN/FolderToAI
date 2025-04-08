@@ -283,7 +283,7 @@ impl FolderToAiApp {
         }
         ui.label(n_files_info_str);
 
-        let mut size_info_str = String::from("Number of binary files: ");
+        let mut size_info_str = String::from("Number of binary files among the scanned ones: ");
         if self.state == FolderToAiState::Initializing || self.state == FolderToAiState::ObtainingInitialInformationAboutTheFiles || self.state == FolderToAiState::DeterminingBinaryFiles {
             size_info_str += "being determined...";
         }
@@ -347,7 +347,7 @@ impl FolderToAiApp {
             },
             FolderToAiState::DeterminingBinaryFiles => {
                 if self.total_n_files > 0 {
-                    self.folder_info.as_mut().unwrap().determine_binarity_of_next_file(self.n_files_already_determined_whether_binary_or_not);
+                    self.folder_info.as_mut().unwrap().determine_binarity_of_next_file(self.n_files_already_determined_whether_binary_or_not, &self.settings);
                     self.n_files_already_determined_whether_binary_or_not += 1;
     
                     if self.total_n_files > 0 {
@@ -362,7 +362,7 @@ impl FolderToAiApp {
                 }
     
                 if self.total_n_files == self.n_files_already_determined_whether_binary_or_not {
-                    self.folder_info.as_mut().unwrap().determine_files_too_large(self.settings.file_size_limit);
+                    self.folder_info.as_mut().unwrap().determine_files_too_large(self.settings.file_size_limit, &self.settings);
     
                     self.total_n_files_to_load = self.folder_info.as_mut().unwrap().get_number_of_files_whose_contents_should_be_loaded();
     

@@ -107,14 +107,18 @@ impl FolderInfo {
         Ok(result)
     }
 
-    pub fn determine_binarity_of_next_file(&mut self, file_index: usize) {
+    pub fn determine_binarity_of_next_file(&mut self, file_index: usize, settings: &Settings) {
         let file_info = &mut self.file_infos[file_index];
-        file_info.is_binary = file_is_binary(file_info.filepath.as_str());
+        if !Self::should_ignore_file(&file_info.filepath, settings) {
+            file_info.is_binary = file_is_binary(file_info.filepath.as_str());
+        }
     }
 
-    pub fn determine_files_too_large(&mut self, max_file_size_in_bytes: usize) {
+    pub fn determine_files_too_large(&mut self, max_file_size_in_bytes: usize, settings: &Settings) {
         for file_info in &mut self.file_infos {
-            file_info.file_too_large = file_info.size_in_bytes > max_file_size_in_bytes;
+            if !Self::should_ignore_file(&file_info.filepath, settings) {
+                file_info.file_too_large = file_info.size_in_bytes > max_file_size_in_bytes;
+            }
         }
     }
 
