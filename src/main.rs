@@ -130,7 +130,7 @@ impl FolderToAiApp {
 
     fn key_combination_to_step_forward_in_messages_is_pressed(&mut self) -> bool
     {
-        self.input_manager.is_right_key_pressed() || self.input_manager.is_control_v_pressed()
+        self.input_manager.is_right_key_pressed() || self.settings.pasting_with_ctrlv_advances_to_next_message && self.input_manager.is_control_v_pressed()
     }
 
     fn key_combination_to_step_backwards_in_messages_is_pressed(&mut self) -> bool
@@ -301,7 +301,7 @@ impl FolderToAiApp {
 
         ui.label("Send the messages into an AI chat to let it know about the folder");
         ui.label("Navigate between messages with the left/right arrow keys");
-        ui.label("Pasting with CTRL + V also advances to the next message");
+        ui.checkbox(&mut self.settings.pasting_with_ctrlv_advances_to_next_message, "Pasting with CTRL + V advances to the next message");
 
         ui.label(egui::RichText::new(&self.clipboard_content_information_message).color(egui::Color32::GOLD));
     }

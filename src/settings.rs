@@ -12,6 +12,7 @@ struct Vec2Serializable {
 #[derive(Serialize, Deserialize)]
 pub struct Settings {
     window_size: Vec2Serializable,
+    pub pasting_with_ctrlv_advances_to_next_message: bool,
     pub file_size_limit: usize,
     #[serde(skip)]
     ignored_subfolders_input: String,
@@ -24,7 +25,7 @@ impl Settings {
         const DEFAULT_WINDOW_HEIGHT: f32 = 400.0;
         const DEFAULT_FILE_SIZE_LIMIT: usize = 100 * 1024; // 100 KiB
 
-        let mut settings = Settings{window_size: Vec2Serializable{x: DEFAULT_WINDOW_WIDTH, y: DEFAULT_WINDOW_HEIGHT}, ignored_subfolders_input: String::from(""), ignored_subfolders: BTreeSet::new(), file_size_limit: DEFAULT_FILE_SIZE_LIMIT};
+        let mut settings = Settings{window_size: Vec2Serializable{x: DEFAULT_WINDOW_WIDTH, y: DEFAULT_WINDOW_HEIGHT}, pasting_with_ctrlv_advances_to_next_message: true, ignored_subfolders_input: String::from(""), ignored_subfolders: BTreeSet::new(), file_size_limit: DEFAULT_FILE_SIZE_LIMIT};
 
         settings.initialize_default_ignored_subfolders();
 
